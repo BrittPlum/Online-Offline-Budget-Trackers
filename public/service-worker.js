@@ -1,13 +1,14 @@
 const CACHE_NAME = "static-cache-v2";
 const DATA_CACHE_NAME = "data-cache-v1";
 const FILES_TO_CACHE = [
-    "/",
+    
     "/index.html",
     "/manifest.webmanifest",
-    "/assets/css/style.css",
-    "/routes/api.js",
-    "/public/icons/icon-192x192.png",
-    "/public/icon/icon-512x512.png"
+    "/styles.css",
+    "/index.js",
+    "/db.js",
+    "/icons/icon-192x192.png",
+    "/icons/icon-512x512.png"
  
 ];
 
@@ -15,7 +16,7 @@ const FILES_TO_CACHE = [
 self.addEventListener("install", function (evt) {
   // pre cache image data
   evt.waitUntil(
-    caches.open(DATA_CACHE_NAME).then((cache) => cache.add("/api/images"))
+    caches.open(DATA_CACHE_NAME).then((cache) => cache.add("/api/transaction"))
   );
     
   // pre cache all static assets
@@ -49,6 +50,7 @@ self.addEventListener("activate", function(evt) {
 // fetch
 self.addEventListener("fetch", function(evt) {
   if (evt.request.url.includes("/api/")) {
+      console.log('[Service Worker] Fetch (data)')
     evt.respondWith(
       caches.open(DATA_CACHE_NAME).then(cache => {
         return fetch(evt.request)
